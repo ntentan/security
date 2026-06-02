@@ -1,9 +1,9 @@
 <?php
-namespace ntentan\middleware\auth;
+namespace ntentan\security\auth;
 
 use ntentan\middleware\Middleware;
 
-interface AuthMethod extends Middleware
+interface AuthProvider extends Middleware
 {
     function isAuthenticated(): bool;
 }

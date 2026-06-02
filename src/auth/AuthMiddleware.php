@@ -1,5 +1,5 @@
 <?php
-namespace ntentan\middleware\auth;
+namespace ntentan\security\auth;
 
 use ntentan\middleware\Middleware;
 use ntentan\Session;
@@ -18,7 +18,7 @@ class AuthMiddleware implements Middleware
 {
     /**
      * A factory for creating authentication methods.
-     * @var \ntentan\middleware\auth\AuthMethodFactory
+     * @var \ntentan\middleware\auth\AuthProviderFactory
      */
     private AuthMethodFactory $authMethodFactory;
 

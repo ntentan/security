@@ -4,11 +4,11 @@ namespace ntentan\middleware\auth;
 use ntentan\Context;
 
 /**
- * A factory for creating authentication methods.
+ * A factory for creating authentication provider.
  * 
  * @author ekow
  */
-class AuthMethodFactory
+class AuthProviderFactory
 {
     private array $factories = [];
 
