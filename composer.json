@@ -1,0 +1,20 @@
+{
+    "name": "ntentan/security",
+    "description": "A collection of security middleware for ntentan",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Ntentan\\Security\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "James Ekow Abaka Ainooson",
+            "email": "jainooson@gmail.com"
+        }
+    ],
+    "require": {
+        "ntentan/ntentan": "0.*"
+    }
+}
