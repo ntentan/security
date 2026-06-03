@@ -5,7 +5,8 @@
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Ntentan\\Security\\": "src/"
+            "ntentan\\security\\": "src/",
+            "ntentan\\security\\tests\\": "tests/"
         }
     },
     "authors": [
@@ -16,5 +17,8 @@
     ],
     "require": {
         "ntentan/ntentan": "0.*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^13.1"
     }
 }

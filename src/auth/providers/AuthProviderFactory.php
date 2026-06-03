@@ -1,5 +1,5 @@
 <?php
-namespace ntentan\middleware\auth;
+namespace ntentan\security\auth\providers;
 
 use ntentan\Context;
 

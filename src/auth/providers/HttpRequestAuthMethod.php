@@ -1,6 +1,5 @@
 <?php
-
-namespace ntentan\middleware\auth;
+namespace ntentan\security\auth\providers;
 
 use ntentan\Context;
 use ntentan\utils\Input;
@@ -8,12 +7,13 @@ use ntentan\Session;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use ntentan\exceptions\NtentanException;
+use ntentan\security\auth\model\AuthUserModelFactory;
 
 /**
  * An authentication method that receives a username and password through an HTTP request.
  * The parameters which should be sent through a POST request are retrieved and validated against a local auth database.
  */
-class HttpRequestAuthMethod implements AuthMethod
+class HttpRequestAuthMethod implements AuthProvider
 {
     private Context $context;
     private AuthUserModelFactory $userModelFactory;

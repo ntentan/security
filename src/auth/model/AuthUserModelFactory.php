@@ -1,6 +1,6 @@
 <?php
 
-namespace ntentan\middleware\auth;
+namespace ntentan\security\auth\model;
 
 use ntentan\exceptions\NtentanException;
 use Psr\Container\ContainerInterface;

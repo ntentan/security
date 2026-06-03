@@ -1,6 +1,6 @@
 <?php
 
-namespace ntentan\middleware\auth;
+namespace ntentan\security\auth\model;
 
 /**
  * The authentication user

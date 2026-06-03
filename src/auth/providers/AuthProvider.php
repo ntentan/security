@@ -1,5 +1,5 @@
 <?php
-namespace ntentan\security\auth;
+namespace ntentan\security\auth\providers;
 
 use ntentan\middleware\Middleware;
 
