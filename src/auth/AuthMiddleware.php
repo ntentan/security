@@ -4,6 +4,7 @@ namespace ntentan\security\auth;
 use ntentan\middleware\Middleware;
 use ntentan\Session;
 use ntentan\sessions\SessionStore;
+use ntentan\security\auth\providers\AuthProviderFactory;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -20,7 +21,7 @@ class AuthMiddleware implements Middleware
      * A factory for creating authentication methods.
      * @var \ntentan\middleware\auth\AuthProviderFactory
      */
-    private AuthMethodFactory $authMethodFactory;
+    private AuthProviderFactory $authMethodFactory;
 
     /**
      * An array holding the configuration for the authentication middleware.
@@ -34,7 +35,7 @@ class AuthMiddleware implements Middleware
      * Create an instance of the authentication middleware.
      * @param AuthMethodFactory $authMethodFactory
      */
-    public function __construct(AuthMethodFactory $authMethodFactory, SessionStore $sessionStore)
+    public function __construct(AuthProviderFactory $authMethodFactory, SessionStore $sessionStore)
     {
         $this->authMethodFactory = $authMethodFactory;
         $this->session = $sessionStore;

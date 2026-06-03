@@ -2,6 +2,7 @@
 namespace ntentan\security\auth\providers;
 
 use ntentan\Context;
+use ntentan\security\auth\model\AuthUserModelFactory;
 
 /**
  * A factory for creating authentication provider.
@@ -15,12 +16,12 @@ class AuthProviderFactory
     public function __construct(Context $context, AuthUserModelFactory $userModelFactory) {
         $this->factories = [
             'http_request' => function() use ($context, $userModelFactory) {
-                return new HttpRequestAuthMethod($context, $userModelFactory);
+                return new HttpRequestProvider($context, $userModelFactory);
             },
         ];
     }
 
-    public function create(array $config): AuthMethod
+    public function create(array $config): AuthProvider
     {
         $authMethodType = $config['method'] ?? 'http_request';
         if (!isset($this->factories[$authMethodType])) {
