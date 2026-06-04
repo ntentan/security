@@ -6,6 +6,7 @@ use ntentan\middleware\Middleware;
 use ntentan\sessions\SessionStore;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use ntentan\http\StringStream;
 
 class CsrfMiddleware implements Middleware
 {
@@ -25,10 +26,10 @@ class CsrfMiddleware implements Middleware
             $request->getMethod() == "POST" || $request->getMethod() == "PUT" ||
             $request->getMethod() == "PATCH" || $request->getMethod() == "DELETE"
         ) {
-            $csrfToken = $request->getParsedBody()['csrf_token'] ?? null;
+            $csrfToken = $request->getHeader('X-CSRF-Token')[0] ?? $request->getParsedBody()['csrf_token'] ?? null;
             $sessionToken = $this->sessionStore->get('csrf_token');
             if (!is_string($csrfToken) || !is_string($sessionToken) || !hash_equals($sessionToken, $csrfToken)) {
-                return $response->withStatus(403);
+                return $response->withStatus(403)->withBody(new StringStream('Forbidden: Invalid CSRF token'));
             }
         }
         $this->setupToken();
@@ -38,7 +39,18 @@ class CsrfMiddleware implements Middleware
     private function setupToken() : void
     {
         if (!$this->csrfTokenSet) {
-            $this->sessionStore->set('csrf_token', bin2hex(random_bytes(32)));
+            $token = bin2hex(random_bytes(32));
+            $this->sessionStore->set('csrf_token', $token);
+            if ($this->config["set_cookie"] ?? false) {
+                setcookie("CSRF_TOKEN", $token, [
+                    "expires" => "",
+                    "path" => "/",
+                    "domain" => '',
+                    "secure" => true,
+                    "httponly" => false,
+                    "samesite" => 'Lax',
+                ]);
+            }
         }
     }
 
