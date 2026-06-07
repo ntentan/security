@@ -69,6 +69,7 @@ class CsrfMiddlewareTest extends TestCase
 
         $response = $this->createMock(ResponseInterface::class);
         $response->expects($this->once())->method('withStatus')->with(403)->willReturnSelf();
+        $response->expects($this->once())->method('withBody')->willReturnSelf();
 
         $called = false;
         $next = $this->getNextCallable($called);
@@ -92,6 +93,7 @@ class CsrfMiddlewareTest extends TestCase
 
         $response = $this->createMock(ResponseInterface::class);
         $response->expects($this->once())->method('withStatus')->with(403)->willReturnSelf();
+        $response->expects($this->once())->method('withBody')->willReturnSelf();
 
         $called = false;
         $next = $this->getNextCallable($called);
@@ -132,5 +134,59 @@ class CsrfMiddlewareTest extends TestCase
         $middleware = new CsrfMiddleware($sessionStore);
         $middleware->configure(['key' => 'value']);
         $this->assertTrue(true); // Just to test it doesn't crash
+    }
+
+    public function testPostRequestAllowedForExceptionPathPrefix()
+    {
+        $sessionStore = $this->createMock(SessionStore::class);
+        $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(true);
+        $sessionStore->expects($this->never())->method('get');
+
+        $uri = $this->createMock(\Psr\Http\Message\UriInterface::class);
+        $uri->method('getPath')->willReturn('/api/v1/webhook');
+
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects($this->any())->method('getMethod')->willReturn('POST');
+        $request->expects($this->any())->method('getUri')->willReturn($uri);
+        $request->expects($this->never())->method('getParsedBody');
+
+        $response = $this->createMock(ResponseInterface::class);
+        
+        $called = false;
+        $next = $this->getNextCallable($called);
+
+        $middleware = new CsrfMiddleware($sessionStore);
+        $middleware->configure(['exceptions' => ['/api/']]);
+        $result = $middleware->run($request, $response, $next);
+
+        $this->assertTrue($called);
+        $this->assertSame($response, $result);
+    }
+
+    public function testPostRequestAllowedForExceptionRegex()
+    {
+        $sessionStore = $this->createMock(SessionStore::class);
+        $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(true);
+        $sessionStore->expects($this->never())->method('get');
+
+        $uri = $this->createMock(\Psr\Http\Message\UriInterface::class);
+        $uri->method('getPath')->willReturn('/users/123/posts');
+
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects($this->any())->method('getMethod')->willReturn('POST');
+        $request->expects($this->any())->method('getUri')->willReturn($uri);
+        $request->expects($this->never())->method('getParsedBody');
+
+        $response = $this->createMock(ResponseInterface::class);
+        
+        $called = false;
+        $next = $this->getNextCallable($called);
+
+        $middleware = new CsrfMiddleware($sessionStore);
+        $middleware->configure(['exceptions' => ['/^\/users\/\d+\/posts$/']]);
+        $result = $middleware->run($request, $response, $next);
+
+        $this->assertTrue($called);
+        $this->assertSame($response, $result);
     }
 }

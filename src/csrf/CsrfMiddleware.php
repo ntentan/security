@@ -26,14 +26,32 @@ class CsrfMiddleware implements Middleware
             $request->getMethod() == "POST" || $request->getMethod() == "PUT" ||
             $request->getMethod() == "PATCH" || $request->getMethod() == "DELETE"
         ) {
-            $csrfToken = $request->getHeader('X-CSRF-Token')[0] ?? $request->getParsedBody()['csrf_token'] ?? null;
-            $sessionToken = $this->sessionStore->get('csrf_token');
-            if (!is_string($csrfToken) || !is_string($sessionToken) || !hash_equals($sessionToken, $csrfToken)) {
-                return $response->withStatus(403)->withBody(new StringStream('Forbidden: Invalid CSRF token'));
+            if (!$this->isExcluded($request->getUri()->getPath())) {
+                $csrfToken = $request->getHeader('X-CSRF-Token')[0] ?? $request->getParsedBody()['csrf_token'] ?? null;
+                $sessionToken = $this->sessionStore->get('csrf_token');
+                if (!is_string($csrfToken) || !is_string($sessionToken) || !hash_equals($sessionToken, $csrfToken)) {
+                    return $response->withStatus(403)->withBody(new StringStream('Forbidden: Invalid CSRF token'));
+                }
             }
         }
         $this->setupToken();
         return $next($request, $response);
+    }
+
+    private function isExcluded(string $path): bool
+    {
+        $exceptions = $this->config['exceptions'] ?? [];
+        foreach ($exceptions as $exception) {
+            if (str_starts_with($exception, '/') && str_ends_with($exception, '/') && strlen($exception) > 2) {
+                if (preg_match($exception, $path)) {
+                    return true;
+                }
+            }
+            if (str_starts_with($path, $exception)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private function setupToken() : void
