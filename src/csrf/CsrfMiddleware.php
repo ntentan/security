@@ -72,7 +72,7 @@ class CsrfMiddleware implements Middleware
         }
     }
 
-    public function configure(array $configuration)
+    public function configure(array $configuration): void
     {
         $this->config = $configuration;
     }
