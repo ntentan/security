@@ -13,7 +13,7 @@ class AuthUserModelFactoryTest extends TestCase
     public function testCreateReturnsModel()
     {
         $container = $this->createMock(ContainerInterface::class);
-        $model = $this->createMock(AuthUserModel::class);
+        $model = $this->createStub(AuthUserModel::class);
 
         $container->expects($this->once())->method('get')->with('MyUserModel')->willReturn($model);
 
@@ -27,7 +27,7 @@ class AuthUserModelFactoryTest extends TestCase
 
     public function testCreateThrowsExceptionWhenModelClassNotSet()
     {
-        $container = $this->createMock(ContainerInterface::class);
+        $container = $this->createStub(ContainerInterface::class);
 
         $factory = new AuthUserModelFactory($container);
 

@@ -24,10 +24,10 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(false);
         $sessionStore->expects($this->once())->method('set')->with('csrf_token', $this->callback('is_string'));
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('GET');
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getMethod')->willReturn('GET');
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $called = false;
         $next = $this->getNextCallable($called);
 
@@ -44,10 +44,10 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(true);
         $sessionStore->expects($this->never())->method('set');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('GET');
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getMethod')->willReturn('GET');
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $called = false;
         $next = $this->getNextCallable($called);
 
@@ -64,7 +64,7 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(true);
 
         $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
+        $request->method('getMethod')->willReturn('POST');
         $request->expects($this->once())->method('getParsedBody')->willReturn([]);
 
         $response = $this->createMock(ResponseInterface::class);
@@ -88,7 +88,7 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->once())->method('get')->with('csrf_token')->willReturn('valid_token');
 
         $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
+        $request->method('getMethod')->willReturn('POST');
         $request->expects($this->once())->method('getParsedBody')->willReturn(['csrf_token' => 'invalid_token']);
 
         $response = $this->createMock(ResponseInterface::class);
@@ -113,10 +113,10 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->never())->method('set');
 
         $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
+        $request->method('getMethod')->willReturn('POST');
         $request->expects($this->once())->method('getParsedBody')->willReturn(['csrf_token' => 'valid_token']);
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         
         $called = false;
         $next = $this->getNextCallable($called);
@@ -130,7 +130,7 @@ class CsrfMiddlewareTest extends TestCase
 
     public function testConfigure()
     {
-        $sessionStore = $this->createMock(SessionStore::class);
+        $sessionStore = $this->createStub(SessionStore::class);
         $middleware = new CsrfMiddleware($sessionStore);
         $middleware->configure(['key' => 'value']);
         $this->assertTrue(true); // Just to test it doesn't crash
@@ -142,15 +142,15 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(true);
         $sessionStore->expects($this->never())->method('get');
 
-        $uri = $this->createMock(\Psr\Http\Message\UriInterface::class);
+        $uri = $this->createStub(\Psr\Http\Message\UriInterface::class);
         $uri->method('getPath')->willReturn('/api/v1/webhook');
 
         $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getUri')->willReturn($uri);
         $request->expects($this->never())->method('getParsedBody');
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         
         $called = false;
         $next = $this->getNextCallable($called);
@@ -169,15 +169,15 @@ class CsrfMiddlewareTest extends TestCase
         $sessionStore->expects($this->once())->method('has')->with('csrf_token')->willReturn(true);
         $sessionStore->expects($this->never())->method('get');
 
-        $uri = $this->createMock(\Psr\Http\Message\UriInterface::class);
+        $uri = $this->createStub(\Psr\Http\Message\UriInterface::class);
         $uri->method('getPath')->willReturn('/users/123/posts');
 
         $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getUri')->willReturn($uri);
         $request->expects($this->never())->method('getParsedBody');
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         
         $called = false;
         $next = $this->getNextCallable($called);

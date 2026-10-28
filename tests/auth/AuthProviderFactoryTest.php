@@ -13,8 +13,8 @@ class AuthProviderFactoryTest extends TestCase
 {
     public function testCreateDefaultHttpRequestProvider()
     {
-        $context = $this->createMock(Context::class);
-        $userModelFactory = $this->createMock(AuthUserModelFactory::class);
+        $context = $this->createStub(Context::class);
+        $userModelFactory = $this->createStub(AuthUserModelFactory::class);
 
         $factory = new AuthProviderFactory($context, $userModelFactory);
         $provider = $factory->create([]);
@@ -24,8 +24,8 @@ class AuthProviderFactoryTest extends TestCase
 
     public function testCreateRegisteredProvider()
     {
-        $context = $this->createMock(Context::class);
-        $userModelFactory = $this->createMock(AuthUserModelFactory::class);
+        $context = $this->createStub(Context::class);
+        $userModelFactory = $this->createStub(AuthUserModelFactory::class);
 
         $customProvider = $this->createMock(AuthProvider::class);
         $customProvider->expects($this->once())->method('configure')->with(['method' => 'custom']);
@@ -42,8 +42,8 @@ class AuthProviderFactoryTest extends TestCase
 
     public function testCreateThrowsExceptionForUnknownProvider()
     {
-        $context = $this->createMock(Context::class);
-        $userModelFactory = $this->createMock(AuthUserModelFactory::class);
+        $context = $this->createStub(Context::class);
+        $userModelFactory = $this->createStub(AuthUserModelFactory::class);
 
         $factory = new AuthProviderFactory($context, $userModelFactory);
 

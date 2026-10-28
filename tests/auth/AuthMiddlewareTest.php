@@ -29,8 +29,8 @@ class AuthMiddlewareTest extends TestCase
         $authMethodFactory = $this->createMock(AuthProviderFactory::class);
         $authMethodFactory->expects($this->never())->method('create');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $response = $this->createMock(ResponseInterface::class);
+        $request = $this->createStub(ServerRequestInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
 
         $called = false;
         $next = $this->getNextCallable($called);
@@ -56,7 +56,7 @@ class AuthMiddlewareTest extends TestCase
         $request = $this->createMock(ServerRequestInterface::class);
         $request->expects($this->once())->method('getUri')->willReturn($uri);
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
 
         $called = false;
         $next = $this->getNextCallable($called);
@@ -80,9 +80,9 @@ class AuthMiddlewareTest extends TestCase
         $request = $this->createMock(ServerRequestInterface::class);
         $request->expects($this->once())->method('getUri')->willReturn($uri);
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
 
-        $authResponse = $this->createMock(ResponseInterface::class);
+        $authResponse = $this->createStub(ResponseInterface::class);
 
         $authProvider = $this->createMock(AuthProvider::class);
         $authProvider->expects($this->once())->method('run')->willReturn($authResponse);

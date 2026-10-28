@@ -25,7 +25,7 @@ class HttpRequestProviderTest extends TestCase
 
     public function testConfigureSetsUserModel()
     {
-        $context = $this->createMock(Context::class);
+        $context = $this->createStub(Context::class);
         $userModelFactory = $this->createMock(AuthUserModelFactory::class);
         
         $userModelFactory->expects($this->once())->method('setModelClass')->with('MyUserModel');
@@ -36,17 +36,17 @@ class HttpRequestProviderTest extends TestCase
 
     public function testRunSkipsLoginPathWithGetMethod()
     {
-        $context = $this->createMock(Context::class);
-        $userModelFactory = $this->createMock(AuthUserModelFactory::class);
+        $context = $this->createStub(Context::class);
+        $userModelFactory = $this->createStub(AuthUserModelFactory::class);
 
-        $uri = $this->createMock(UriInterface::class);
-        $uri->expects($this->any())->method('getPath')->willReturn('/login');
+        $uri = $this->createStub(UriInterface::class);
+        $uri->method('getPath')->willReturn('/login');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
-        $request->expects($this->any())->method('getMethod')->willReturn('GET');
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getUri')->willReturn($uri);
+        $request->method('getMethod')->willReturn('GET');
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $called = false;
         $next = $this->getNextCallable($called);
 
@@ -63,13 +63,13 @@ class HttpRequestProviderTest extends TestCase
         $context = $this->createMock(Context::class);
         $context->expects($this->once())->method('getPath')->with('/login')->willReturn('/app/login');
 
-        $userModelFactory = $this->createMock(AuthUserModelFactory::class);
+        $userModelFactory = $this->createStub(AuthUserModelFactory::class);
 
-        $uri = $this->createMock(UriInterface::class);
-        $uri->expects($this->any())->method('getPath')->willReturn('/dashboard');
+        $uri = $this->createStub(UriInterface::class);
+        $uri->method('getPath')->willReturn('/dashboard');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getUri')->willReturn($uri);
 
         $response = $this->createMock(ResponseInterface::class);
         $response->expects($this->once())->method('withStatus')->with(302)->willReturnSelf();
@@ -106,13 +106,13 @@ class HttpRequestProviderTest extends TestCase
         $userModelFactory = $this->createMock(AuthUserModelFactory::class);
         $userModelFactory->expects($this->once())->method('create')->willReturn($userModel);
 
-        $uri = $this->createMock(UriInterface::class);
-        $uri->expects($this->any())->method('getPath')->willReturn('/login');
+        $uri = $this->createStub(UriInterface::class);
+        $uri->method('getPath')->willReturn('/login');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
-        $request->expects($this->any())->method('getParsedBody')->willReturn([
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getUri')->willReturn($uri);
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getParsedBody')->willReturn([
             'username' => 'user1',
             'password' => 'secret'
         ]);
@@ -139,7 +139,7 @@ class HttpRequestProviderTest extends TestCase
 
     public function testRunFailsAuthenticationWithInvalidPassword()
     {
-        $context = $this->createMock(Context::class);
+        $context = $this->createStub(Context::class);
 
         $userModel = $this->createMock(AuthUserModel::class);
         $userModel->expects($this->once())->method('getPassword')->with('user1')->willReturn('hashed_pass');
@@ -147,13 +147,13 @@ class HttpRequestProviderTest extends TestCase
         $userModelFactory = $this->createMock(AuthUserModelFactory::class);
         $userModelFactory->expects($this->once())->method('create')->willReturn($userModel);
 
-        $uri = $this->createMock(UriInterface::class);
-        $uri->expects($this->any())->method('getPath')->willReturn('/login');
+        $uri = $this->createStub(UriInterface::class);
+        $uri->method('getPath')->willReturn('/login');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
-        $request->expects($this->any())->method('getParsedBody')->willReturn([
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getUri')->willReturn($uri);
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getParsedBody')->willReturn([
             'username' => 'user1',
             'password' => 'wrong'
         ]);
@@ -179,18 +179,18 @@ class HttpRequestProviderTest extends TestCase
 
     public function testRunThrowsExceptionIfVerifyPasswordsWithNotSet()
     {
-        $context = $this->createMock(Context::class);
-        $userModelFactory = $this->createMock(AuthUserModelFactory::class);
+        $context = $this->createStub(Context::class);
+        $userModelFactory = $this->createStub(AuthUserModelFactory::class);
 
-        $uri = $this->createMock(UriInterface::class);
-        $uri->expects($this->any())->method('getPath')->willReturn('/login');
+        $uri = $this->createStub(UriInterface::class);
+        $uri->method('getPath')->willReturn('/login');
 
-        $request = $this->createMock(ServerRequestInterface::class);
-        $request->expects($this->any())->method('getUri')->willReturn($uri);
-        $request->expects($this->any())->method('getMethod')->willReturn('POST');
-        $request->expects($this->any())->method('getParsedBody')->willReturn([]);
+        $request = $this->createStub(ServerRequestInterface::class);
+        $request->method('getUri')->willReturn($uri);
+        $request->method('getMethod')->willReturn('POST');
+        $request->method('getParsedBody')->willReturn([]);
 
-        $response = $this->createMock(ResponseInterface::class);
+        $response = $this->createStub(ResponseInterface::class);
         $called = false;
         $next = $this->getNextCallable($called);
 

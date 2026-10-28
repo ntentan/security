@@ -7,6 +7,7 @@
          beStrictAboutOutputDuringTests="true"
          failOnRisky="true"
          failOnWarning="true"
+         displayDetailsOnAllIssues="true"
          colors="true">
     <testsuites>
         <testsuite name="default">
@@ -14,7 +15,7 @@
         </testsuite>
     </testsuites>
 
-    <source ignoreIndirectDeprecations="true" restrictNotices="true" restrictWarnings="true">
+    <source>
         <include>
             <directory>src</directory>
         </include>
