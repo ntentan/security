@@ -33,7 +33,8 @@ class AuthMiddleware implements Middleware
 
     /**
      * Create an instance of the authentication middleware.
-     * @param AuthMethodFactory $authMethodFactory
+     * @param AuthProviderFactory $authMethodFactory
+     * @param SessionStore $sessionStore
      */
     public function __construct(AuthProviderFactory $authMethodFactory, SessionStore $sessionStore)
     {
@@ -42,7 +43,7 @@ class AuthMiddleware implements Middleware
     }
     
     /**
-     * Chech for paths that are excluded from authentication.
+     * Check for paths that are excluded from authentication.
      * @param string $path
      * @param array $excludedPaths
      * @return boolean
@@ -81,10 +82,9 @@ class AuthMiddleware implements Middleware
     }
     
     #[\Override]
-    public function configure(array $configuration)
+    public function configure(array $configuration): void
     {
         $this->config = $configuration;
-
     }
 }
 

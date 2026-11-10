@@ -1,6 +1,7 @@
 <?php
 namespace ntentan\security\auth\providers;
 
+use _PHPStan_08e3736ef\Nette\Neon\Exception;
 use ntentan\Context;
 use ntentan\Session;
 use Psr\Http\Message\ResponseInterface;
@@ -41,6 +42,9 @@ class HttpRequestProvider implements AuthProvider
     #[\Override]
     public function run(ServerRequestInterface $request, ResponseInterface $response, callable $next): ResponseInterface
     {
+        if (!isset($this->config['login_path'])) {
+            throw new NtentanException("Please set the 'login_path' to the path that serves the login form.");
+        }
         // Skip requests made to the login path so the underlying middleware can present the challenge.
         if ($request->getUri()->getPath() == $this->config['login_path'] && (strtolower($request->getMethod()) == "get")) {
             return $next($request, $response, $next);
@@ -67,7 +71,9 @@ class HttpRequestProvider implements AuthProvider
                 return $next($request, $response->withStatus(401, "Invalid username or password"), $next);
             }
         } else if (!isset($this->config['verify_passwords_with'])) {
-            throw new NtentanException("A password verification function was not specified for the HTTP authentication method");
+            throw new NtentanException(
+                "A password verification function was not specified for the HTTP authentication method. Pass a closure to the [verify_passwords_with] configuration variable."
+            );
         }
     }
 
